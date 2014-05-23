@@ -38,7 +38,7 @@ func (c Persons) Show(id string) revel.Result {
 func (c Persons) Update(name string, age int, id string) revel.Result {
 	p := &models.Person{}
 	if err := zoom.ScanById(id, p); err != nil {
-		return c.RenderText("{'error': %s}", err)
+		return c.RenderJsonError(500, err)
 	}
 	if _, ok := c.Params.Values["name"]; ok {
 		p.Name = name
@@ -56,5 +56,5 @@ func (c Persons) Delete(id string) revel.Result {
 	if err := zoom.DeleteById("Person", id); err != nil {
 		return c.RenderJsonError(500, err)
 	}
-	return c.RenderText("{'message': 'ok'}")
+	return c.RenderJsonOk()
 }
